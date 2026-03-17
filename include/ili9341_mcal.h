@@ -26,8 +26,8 @@ void set_pin_as_output(uint32_t port, uint32_t pin);
 void set_pin(uint32_t port, uint32_t pin);
 void pin_clr(uint32_t port, uint32_t pin);
 
-#define CHIP_UNSELECT() pin_clr(LCD_CS_PORT, LCD_CS_PIN)
-#define CHIP_SELECT()   set_pin(LCD_CS_PORT, LCD_CS_PIN)
+#define CHIP_SELECT() pin_clr(LCD_CS_PORT, LCD_CS_PIN)
+#define CHIP_UNSELECT()   set_pin(LCD_CS_PORT, LCD_CS_PIN)
 #define DC_CMD()        pin_clr(LCD_DC_PORT, LCD_DC_PIN)	// low  = command
 #define DC_DATA()       set_pin(LCD_DC_PORT, LCD_DC_PIN)  // high = data
 #define RST_LOW()       pin_clr(LCD_RST_PORT, LCD_RST_PIN)

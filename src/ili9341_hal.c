@@ -13,6 +13,7 @@
 #include <stdint.h>
 #include "ili9341_hal.h"
 #include "ili9341_mcal.h"
+#include "ili9341_cmd.h"
 
 /********************************************************************************
  * EXTERN VARIABLES
@@ -41,10 +42,6 @@
 /********************************************************************************
  * STATIC FUNCTIONS
  ********************************************************************************/
-
-/********************************************************************************
- * GLOBAL FUNCTIONS
- ********************************************************************************/
 void comms_init(void)
 {
 	spi_init();
@@ -53,17 +50,17 @@ void comms_init(void)
 void write_cmd(uint8_t cmd)
 {
 	DC_CMD();
-	CHIP_UNSELECT();
-	spi_write(&cmd, 1);
 	CHIP_SELECT();
+	spi_write(&cmd, 1);
+	CHIP_UNSELECT();
 }
 
 void write_data(const uint8_t *data, uint32_t len)
 {
 	DC_DATA();
-	CHIP_UNSELECT();
-	spi_write(data, len);
 	CHIP_SELECT();
+	spi_write(data, len);
+	CHIP_UNSELECT();
 }
 
 void write_byte(uint8_t b) { write_data(&b, 1); }
@@ -72,4 +69,24 @@ void write_u16(uint16_t v)
 {
 	uint8_t buf[2] = {v >> 8, v & 0xFF};
 	write_data(buf, 2);
+}
+
+/********************************************************************************
+ * GLOBAL FUNCTIONS
+ ********************************************************************************/
+void hardware_reset(void)
+{
+	// Hardware reset
+	//reset_hardware_display();
+	RST_LOW();
+	delay_ms(10);
+	RST_HIGH();
+	delay_ms(120);
+}
+
+void software_reset(void)
+{
+	//reset_software_display();
+	write_cmd(0x01); // Software reset
+	delay_ms(150);
 }

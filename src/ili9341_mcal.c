@@ -88,7 +88,7 @@ void spi_init(void)
 	set_pin_as_output(LCD_CS_PORT, LCD_CS_PIN);
 	set_pin_as_output(LCD_DC_PORT, LCD_DC_PIN);
 	set_pin_as_output(LCD_RST_PORT, LCD_RST_PIN);
-	CHIP_SELECT();
+	CHIP_UNSELECT();
 
 	// Use SPIM0
 	NRF_SPIM0->PSEL.MOSI = (SPI_MOSI_PORT << 5u) | SPI_MOSI_PIN;

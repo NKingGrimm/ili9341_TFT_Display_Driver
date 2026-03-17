@@ -33,6 +33,10 @@ extern "C" {
 /********************************************************************************
  * GLOBAL FUNCTION PROTOTYPES
  ********************************************************************************/
+void hardware_reset(void);
+void software_reset(void);
+
+
 void delay_ms(uint32_t ms);
 void comms_init(void);
 
