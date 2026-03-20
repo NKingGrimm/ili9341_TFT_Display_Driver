@@ -47,30 +47,6 @@ void comms_init(void)
 	spi_init();
 }
 
-void write_cmd(uint8_t cmd)
-{
-	DC_CMD();
-	CHIP_SELECT();
-	spi_write(&cmd, 1);
-	CHIP_UNSELECT();
-}
-
-void write_data(const uint8_t *data, uint32_t len)
-{
-	DC_DATA();
-	CHIP_SELECT();
-	spi_write(data, len);
-	CHIP_UNSELECT();
-}
-
-void write_byte(uint8_t b) { write_data(&b, 1); }
-
-void write_u16(uint16_t v)
-{
-	uint8_t buf[2] = {v >> 8, v & 0xFF};
-	write_data(buf, 2);
-}
-
 /********************************************************************************
  * GLOBAL FUNCTIONS
  ********************************************************************************/
@@ -89,4 +65,20 @@ void software_reset(void)
 	//reset_software_display();
 	write_cmd(0x01); // Software reset
 	delay_ms(150);
+}
+
+void write_cmd(uint8_t cmd)
+{
+	DC_CMD();
+	CHIP_SELECT();
+	spi_write(&cmd, 1);
+	CHIP_UNSELECT();
+}
+
+void write_data(const uint8_t *data, uint32_t len)
+{
+	DC_DATA();
+	CHIP_SELECT();
+	spi_write(data, len);
+	CHIP_UNSELECT();
 }

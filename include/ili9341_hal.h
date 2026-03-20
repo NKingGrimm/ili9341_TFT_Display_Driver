@@ -44,8 +44,6 @@ void spi_write(const uint8_t *data, uint32_t len);
 
 void write_cmd(uint8_t cmd);
 void write_data(const uint8_t *data, uint32_t len);
-void write_byte(uint8_t b);
-void write_u16(uint16_t v);
 
 #ifdef __cplusplus
 }
