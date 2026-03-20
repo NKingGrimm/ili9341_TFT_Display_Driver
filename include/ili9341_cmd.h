@@ -209,8 +209,8 @@ extern "C" {
  * Display dimensions
  * -------------------------------------------------------------------------- */
 
-#define DISPLAY_WIDTH                       240
-#define DISPLAY_HEIGHT                      320
+#define DISPLAY_WIDTH                       239
+#define DISPLAY_HEIGHT                      319
 
 #ifdef __cplusplus
 }

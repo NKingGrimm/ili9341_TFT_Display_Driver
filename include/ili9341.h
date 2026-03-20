@@ -36,8 +36,6 @@ extern "C" {
  ********************************************************************************/
 void ili9341_init(void);
 void ili9341_set_window(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1);
-void ili9341_fill(uint16_t color);
-void ili9341_draw_pixel(uint16_t x, uint16_t y, uint16_t color);
 
 #ifdef __cplusplus
 }
