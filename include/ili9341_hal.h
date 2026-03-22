@@ -39,11 +39,6 @@ void hal_software_reset(void);
 void delay_ms(uint32_t ms);
 void hal_comms_init(void);
 
-void hal_spi_write(const uint8_t *data, uint32_t len);
-
-void hal_write_cmd(uint8_t cmd);
-void hal_write_data(const uint8_t *data, uint32_t len);
-
 void hal_set_pixel_format_16bits(void);
 void hal_sleep_out(void);
 void hal_display_on(void);
