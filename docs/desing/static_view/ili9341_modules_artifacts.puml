@@ -1,0 +1,36 @@
+@startuml ili9341_modules_artifacts
+' ============== Items declaration
+component ili9341{
+  artifact ili9341.c
+  artifact ili9341.h
+}
+
+component ili9341_hal{
+  artifact ili9341_hal.c
+  artifact ili9341_hal.h
+}
+
+component ili9341_nrf52840_mcal{
+  artifact ili9341_nrf52840_mcal.c
+  artifact ili9341_nrf52840_mcal.h
+}
+artifact ili9341_hal_config.h
+artifact ili9341_nrf52840_mcal_config.h
+
+' ============== Items Diagram Order
+ili9341                 -[hidden]right-> ili9341_hal
+ili9341_hal.h           -[hidden]down->  ili9341_hal_config.h
+ili9341_hal             -[hidden]right-> ili9341_nrf52840_mcal
+ili9341_nrf52840_mcal.h -[hidden]down->  ili9341_nrf52840_mcal_config.h
+
+' ============== Items Relationships
+ili9341.c -[dashed]-> ili9341.h: "  includes"
+ili9341.c -[dashed]-> ili9341_hal.h: "  includes"
+
+ili9341_hal.c -[dashed]-> ili9341_hal.h: "  includes"
+ili9341_hal.c -[dashed]-> ili9341_nrf52840_mcal.h: "  includes"
+ili9341_hal.c -[dashed]down-> ili9341_hal_config.h: "  includes"
+
+ili9341_nrf52840_mcal.c -[dashed]-> ili9341_nrf52840_mcal.h: "  includes"
+ili9341_nrf52840_mcal.c -[dashed]-> ili9341_nrf52840_mcal_config.h: "  includes"
+@enduml
