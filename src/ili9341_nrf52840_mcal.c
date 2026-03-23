@@ -17,7 +17,7 @@
 /********************************************************************************
  * EXTERN VARIABLES
  ********************************************************************************/
-bool mcal_initialized = false;
+bool mcalInitialized = false;
 
 /********************************************************************************
  * PRIVATE MACROS AND DEFINES
@@ -97,19 +97,19 @@ static void spi_init()
  ********************************************************************************/
 void mcal_init(void)
 {
-	if(mcal_initialized == false)
+	if(mcalInitialized == false)
 	{
 		delay_timer_init();
 		spi_init();
 
-		mcal_initialized = true;
+		mcalInitialized = true;
 	}
 	else{}
 }
 
 void mcal_delay_ms(uint16_t ms)
 {
-	if(mcal_initialized == true)
+	if(mcalInitialized == true)
 	{
 		if (ms != 0)
 		{
@@ -128,7 +128,7 @@ void mcal_delay_ms(uint16_t ms)
 
 void mcal_spi_write(const uint8_t *data, uint32_t len)
 {
-	if(mcal_initialized == true)
+	if(mcalInitialized == true)
 	{
 		NRF_SPIM0->TXD.PTR = (uint32_t)data;
 		NRF_SPIM0->TXD.MAXCNT = len;
