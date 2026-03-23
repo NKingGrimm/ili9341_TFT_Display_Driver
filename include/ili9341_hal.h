@@ -36,17 +36,18 @@ extern "C" {
  * GLOBAL FUNCTION PROTOTYPES
  ********************************************************************************/
 void hal_init(void);
+void hal_delay_ms(uint16_t ms);
 
 void hal_hardware_reset(void);
 void hal_software_reset(void);
 
-void hal_delay_ms(uint16_t ms);
-
 void hal_set_pixel_format_16bits(void);
 void hal_sleep_out(void);
 void hal_display_on(void);
+
 void hal_set_column_limits(uint16_t startColumn, uint16_t endColumn);
 void hal_set_row_limits(uint16_t startRow, uint16_t endRow);
+void hal_write_in_memory(uint8_t *data, uint32_t dataLen);
 
 #ifdef __cplusplus
 }
