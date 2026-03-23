@@ -74,7 +74,7 @@ uint8_t ili9341_draw_image(uint8_t *drawingRawBytes, uint8_t len)
  ********************************************************************************/
 void ili9341_init(void)
 {
-	hal_comms_init();
+	hal_init();
 	hal_hardware_reset();
 	hal_software_reset();
 

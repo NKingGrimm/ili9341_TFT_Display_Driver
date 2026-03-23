@@ -60,7 +60,7 @@ static void write_data(const uint8_t *data, uint32_t len)
 /********************************************************************************
  * GLOBAL FUNCTIONS
  ********************************************************************************/
-void hal_comms_init(void)
+void hal_init(void)
 {
 	mcal_init();
 	if(mcalInitialized)

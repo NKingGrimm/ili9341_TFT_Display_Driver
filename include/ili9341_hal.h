@@ -41,7 +41,6 @@ void hal_hardware_reset(void);
 void hal_software_reset(void);
 
 void hal_delay_ms(uint16_t ms);
-void hal_comms_init(void);
 
 void hal_set_pixel_format_16bits(void);
 void hal_sleep_out(void);
