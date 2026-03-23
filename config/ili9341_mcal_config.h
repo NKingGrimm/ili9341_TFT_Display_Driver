@@ -1,61 +1,38 @@
 /**
  ********************************************************************************
- * @file    ili9341_nrf52840.h
+ * @file    ili9341_mcal_config.h
  * @author  ${user}
  * @date    ${date}
  * @brief
  ********************************************************************************
  */
 
-#ifndef ILI9341_CONFIG_H
-#define ILI9341_CONFIG_H
+#ifndef ILI9341_MCAL_CONFIG_H
+#define ILI9341_MCAL_CONFIG_H
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 /********************************************************************************
- * INCLUDES
- ********************************************************************************/
-
-/********************************************************************************
  * MACROS AND DEFINES
  ********************************************************************************/
-#define MICRCONTROLLER NRF52840
-#define SPI_MOSI_PORT 1
-#define SPI_MOSI_PIN  1
-
-#define SPI_MISO_PORT 1
-#define SPI_MISO_PIN  8
-
-#define SPI_SCK_PORT  0
-#define SPI_SCK_PIN   13
-
-#define LCD_CS_PORT   1
-#define LCD_CS_PIN    2
-
-#define LCD_DC_PORT   0
-#define LCD_DC_PIN    27
-
-#define LCD_RST_PORT  0
-#define LCD_RST_PIN   21
-
-#define SPI_MASTER 0
-
+/*
+  List of microcontrollers and SoC supported:
+    - NRF52840
+*/
+#define MICROCONTROLLER_USED NRF52840
 /********************************************************************************
- * TYPEDEFS
+ * INCLUDES
  ********************************************************************************/
-
-/********************************************************************************
- * EXPORTED VARIABLES
- ********************************************************************************/
-
-/********************************************************************************
- * GLOBAL FUNCTION PROTOTYPES
- ********************************************************************************/
+#if MICROCONTROLLER_USED == NRF52840
+#include "ili9341_nrf52840_mcal_config.h"
+#else /* #if MICROCONTROLLER_USED == NRF52840 */
+#error NO MICROCONTROLLER SELECTED
+#endif /* #if MICROCONTROLLER_USED == NRF52840 */
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif /* #ifndef ILI9341_CONFIG_H */
+#endif /* #ifndef ILI9341_MCAL_CONFIG_H */

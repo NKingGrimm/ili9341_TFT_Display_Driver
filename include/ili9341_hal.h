@@ -7,8 +7,8 @@
  ********************************************************************************
  */
 
-#ifndef ILI9341_MCAL_H
-#define ILI9341_MCAL_H
+#ifndef ILI9341_HAL_H
+#define ILI9341_HAL_H
 
 #ifdef __cplusplus
 extern "C" {
@@ -17,6 +17,8 @@ extern "C" {
 /********************************************************************************
  * INCLUDES
  ********************************************************************************/
+#include <stdint.h>
+#include <stdbool.h>
 
 /********************************************************************************
  * MACROS AND DEFINES
@@ -33,10 +35,12 @@ extern "C" {
 /********************************************************************************
  * GLOBAL FUNCTION PROTOTYPES
  ********************************************************************************/
+void hal_init(void);
+
 void hal_hardware_reset(void);
 void hal_software_reset(void);
 
-void delay_ms(uint32_t ms);
+void hal_delay_ms(uint16_t ms);
 void hal_comms_init(void);
 
 void hal_set_pixel_format_16bits(void);
@@ -49,4 +53,4 @@ void hal_set_row_limits(uint16_t startRow, uint16_t endRow);
 }
 #endif
 
-#endif /* #ifndef ILI9341_MCAL_H */
+#endif /* #ifndef ILI9341_HAL_H */
