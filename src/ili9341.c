@@ -43,6 +43,21 @@
 /********************************************************************************
  * STATIC FUNCTIONS
  ********************************************************************************/
+
+/********************************************************************************
+ * GLOBAL FUNCTIONS
+ ********************************************************************************/
+void ili9341_init(void)
+{
+	hal_init();
+	hal_hardware_reset();
+	hal_software_reset();
+
+	hal_set_pixel_format_16bits();
+	hal_sleep_out();
+	hal_display_on();
+}
+
 uint8_t ili9341_set_drawing_area(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1)
 {
 	uint8_t error = ILI9341_NO_ERROR;
@@ -63,24 +78,28 @@ uint8_t ili9341_set_drawing_area(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t
 	return error;
 }
 
-uint8_t ili9341_draw_image(uint8_t *drawingRawBytes, uint8_t len)
+uint8_t ili9341_fill_screen(uint16_t color)
 {
 	uint8_t error = ILI9341_NO_ERROR;
+	uint8_t hi = color >> 8;
+	uint8_t lo = color & 0xFF;
+	uint8_t screenAreaColored[240U*320U*sizeof(uint16_t)];
+
+	for(int i = 0; i < (240U*320U*sizeof(uint16_t)); i+=2)
+	{
+		screenAreaColored[i] = hi;
+		screenAreaColored[i+1] = lo;
+	}
+
+	ili9341_set_drawing_area(0, 0, 239, 319);
+	hal_write_in_memory(screenAreaColored, (240U*320U*sizeof(uint16_t)));
 	return error;
 }
 
-/********************************************************************************
- * GLOBAL FUNCTIONS
- ********************************************************************************/
-void ili9341_init(void)
+uint8_t ili9341_draw_image(uint16_t *imageInRawBytes, uint8_t imageLen)
 {
-	hal_init();
-	hal_hardware_reset();
-	hal_software_reset();
-
-	hal_set_pixel_format_16bits();
-	hal_sleep_out();
-	hal_display_on();
+	uint8_t error = ILI9341_NO_ERROR;
+	return error;
 }
 
 // void ili9341_fill_screen(uint16_t color)
