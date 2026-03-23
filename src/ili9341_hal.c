@@ -81,8 +81,6 @@ void hal_hardware_reset(void)
 {
 	if(halInitialized)
 	{
-		// Hardware reset
-		//reset_hardware_display();
 		RST_LOW();
 		mcal_delay_ms(10);
 		RST_HIGH();
@@ -94,7 +92,6 @@ void hal_software_reset(void)
 {
 	if(halInitialized)
 	{
-		//reset_software_display();
 		write_cmd(0x01); // Software reset
 		mcal_delay_ms(150);
 	}
@@ -131,12 +128,10 @@ void hal_set_column_limits(uint16_t startColumn, uint16_t endColumn)
 {
 	if(halInitialized)
 	{
-		uint8_t startColumnData[2] = {startColumn >> 8, startColumn & 0x0F};
-		uint8_t endColumnData[2]   = {endColumn >> 8, endColumn & 0x0F};
+		uint8_t columnData[4] = {startColumn >> 8, startColumn & 0xFF, endColumn >> 8, endColumn & 0xFF};
 
 		write_cmd(COLUMN_ADDRESS_SET);
-		write_data(startColumnData, 2);
-		write_data(endColumnData, 2);
+		write_data(columnData, 4);
 	}
 }
 
@@ -144,11 +139,19 @@ void hal_set_row_limits(uint16_t startRow, uint16_t endRow)
 {
 	if(halInitialized)
 	{
-		uint8_t startRowData[2] = {startRow >> 8, startRow & 0x0F};
-		uint8_t endRowData[2]   = {endRow >> 8, endRow & 0x0F};
+		uint8_t rowData[4] = {startRow >> 8, startRow & 0xFF, endRow >> 8, endRow & 0xFF};
 
 		write_cmd(PAGE_ADDRESS_SET);
-		write_data(startRowData, 2);
-		write_data(endRowData, 2);
+		write_data(rowData, 4);
+	}
+}
+
+void hal_write_in_memory(uint8_t *data, uint32_t dataLen)
+{
+	if(halInitialized)
+	{
+		write_cmd(0x2C);
+		write_data(data, dataLen);
+		write_cmd(NO_OPERATION);
 	}
 }
