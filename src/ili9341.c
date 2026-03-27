@@ -12,8 +12,6 @@
  ********************************************************************************/
 #include "ili9341.h"
 #include "ili9341_hal.h"
-//TODO: Delete this library and abstract the crossed references
-#include "ili9341_mcal.h"
 
 /********************************************************************************
  * EXTERN VARIABLES
@@ -22,8 +20,8 @@
 /********************************************************************************
  * PRIVATE MACROS AND DEFINES
  ********************************************************************************/
-#define DISPLAY_WIDTH  239
-#define DISPLAY_HEIGHT 319
+#define DISPLAY_WIDTH  240
+#define DISPLAY_HEIGHT 320
 /********************************************************************************
  * PRIVATE TYPEDEFS
  ********************************************************************************/
@@ -53,17 +51,21 @@ void ili9341_init(void)
 	hal_hardware_reset();
 	hal_software_reset();
 
+	uint8_t newMADCTL = 0x00;
+	hal_set_RGB_color_order(&newMADCTL);
+	hal_set_memory_access_control(newMADCTL);
+
 	hal_set_pixel_format_16bits();
 	hal_sleep_out();
 	hal_display_on();
 }
 
-uint8_t ili9341_set_drawing_area(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1)
+uint8_t ili9341_set_drawing_area(uint16_t x0, uint16_t x1, uint16_t y0, uint16_t y1)
 {
 	uint8_t error = ILI9341_NO_ERROR;
 
-	if((x1 > DISPLAY_WIDTH) ||
-    (y1 > DISPLAY_HEIGHT) ||
+	if((x1 >= DISPLAY_WIDTH) ||
+    (y1 >= DISPLAY_HEIGHT) ||
     (x0 > x1)||
     (y0 > y1))
 	{
@@ -83,16 +85,15 @@ uint8_t ili9341_fill_screen(uint16_t color)
 	uint8_t error = ILI9341_NO_ERROR;
 	uint8_t hi = color >> 8;
 	uint8_t lo = color & 0xFF;
-	uint8_t screenAreaColored[240U*320U*sizeof(uint16_t)];
+	uint8_t screenAreaColored[2] = {hi, 0};
 
-	for(int i = 0; i < (240U*320U*sizeof(uint16_t)); i+=2)
+	ili9341_set_drawing_area(0, 239, 0, 319);
+
+	for(int i = 0; i < (240U*320U); i++)
 	{
-		screenAreaColored[i] = hi;
-		screenAreaColored[i+1] = lo;
+		hal_write_in_memory(screenAreaColored, 2);
 	}
 
-	ili9341_set_drawing_area(0, 0, 239, 319);
-	hal_write_in_memory(screenAreaColored, (240U*320U*sizeof(uint16_t)));
 	return error;
 }
 
@@ -100,6 +101,30 @@ uint8_t ili9341_draw_image(uint16_t *imageInRawBytes, uint8_t imageLen)
 {
 	uint8_t error = ILI9341_NO_ERROR;
 	return error;
+}
+
+void ili9341_test_screen(void)
+{
+	uint16_t color = 0xF800; // Gets stored as 00 FF
+	uint8_t screenAreaColored[2] = {0x00,0x1F};
+
+	ili9341_set_drawing_area(0, 239, 0, 319);
+
+	hal_write_in_memory(screenAreaColored, 2);
+	for(int i = 0; i < (240U*320U); i++)
+	{
+		if((color >> 8) == 0xF8)
+		{
+			screenAreaColored[0] = color >> 8;
+			screenAreaColored[1] = color & 0xFF;
+		}
+		else
+		{
+			screenAreaColored[0] = 0x00;
+			screenAreaColored[1] = 0x00;
+		}
+		hal_continue_write_in_memory(screenAreaColored, 2);
+	}
 }
 
 // void ili9341_fill_screen(uint16_t color)

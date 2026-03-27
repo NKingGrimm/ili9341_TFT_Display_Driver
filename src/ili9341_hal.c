@@ -124,6 +124,22 @@ void hal_display_on()
 	}
 }
 
+void hal_set_RGB_color_order(uint8_t *currentMADCTL)
+{
+	*currentMADCTL &= 0xF7; // Clear out BGR bit, leaving it as RGB
+}
+
+void hal_set_BGR_color_order(uint8_t *currentMADCTL)
+{
+	*currentMADCTL |= 0x08; // Set BGR bit
+}
+
+void hal_set_memory_access_control(uint8_t MADCTL)
+{
+  write_cmd(MEMORY_ACCESS_CONTROL);
+	write_data(&MADCTL, 1);
+}
+
 void hal_set_column_limits(uint16_t startColumn, uint16_t endColumn)
 {
 	if(halInitialized)
@@ -152,6 +168,14 @@ void hal_write_in_memory(uint8_t *data, uint32_t dataLen)
 	{
 		write_cmd(0x2C);
 		write_data(data, dataLen);
-		write_cmd(NO_OPERATION);
+	}
+}
+
+void hal_continue_write_in_memory(uint8_t *data, uint32_t dataLen)
+{
+	if(halInitialized)
+	{
+		write_cmd(0x3C);
+		write_data(data, dataLen);
 	}
 }

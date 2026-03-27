@@ -79,7 +79,7 @@ extern "C" {
 #define VERTICAL_SCROLLING_START_ADDRESS    0x37
 #define IDLE_MODE_OFF                       0x38
 #define IDLE_MODE_ON                        0x39
-#define PIXEL_FORMAT_SET                    0x3A  /* 0x55 = 16-bit RGB565, 0x66 = 18-bit RGB666 */
+#define PIXEL_FORMAT_SET                    0x3A
 
 /* --- Continuous memory access --- */
 #define MEMORY_WRITE_CONTINUE               0x3C
