@@ -57,6 +57,12 @@ static void write_data(const uint8_t *data, uint32_t len)
 	CHIP_UNSELECT();
 }
 
+static void pack_u16_be(uint16_t v, uint8_t out[2])
+{
+	out[0] = (uint8_t)(v >> 8);
+	out[1] = (uint8_t)(v & 0xFFu);
+}
+
 /********************************************************************************
  * GLOBAL FUNCTIONS
  ********************************************************************************/
@@ -144,7 +150,9 @@ void hal_set_column_limits(uint16_t startColumn, uint16_t endColumn)
 {
 	if(halInitialized)
 	{
-		uint8_t columnData[4] = {startColumn >> 8, startColumn & 0xFF, endColumn >> 8, endColumn & 0xFF};
+		uint8_t columnData[4];
+		pack_u16_be(startColumn, &columnData[0]);
+		pack_u16_be(endColumn, &columnData[2]);
 
 		write_cmd(COLUMN_ADDRESS_SET);
 		write_data(columnData, 4);
@@ -155,11 +163,18 @@ void hal_set_row_limits(uint16_t startRow, uint16_t endRow)
 {
 	if(halInitialized)
 	{
-		uint8_t rowData[4] = {startRow >> 8, startRow & 0xFF, endRow >> 8, endRow & 0xFF};
+		uint8_t rowData[4];
+		pack_u16_be(startRow, &rowData[0]);
+		pack_u16_be(endRow, &rowData[2]);
 
 		write_cmd(PAGE_ADDRESS_SET);
 		write_data(rowData, 4);
 	}
+}
+
+void hal_pack_color_16(uint16_t color, uint8_t out[2])
+{
+	pack_u16_be(color, &out[0]);
 }
 
 void hal_write_in_memory(uint8_t *data, uint32_t dataLen)

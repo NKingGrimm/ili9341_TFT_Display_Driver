@@ -52,6 +52,7 @@ void hal_set_column_limits(uint16_t startColumn, uint16_t endColumn);
 void hal_set_row_limits(uint16_t startRow, uint16_t endRow);
 void hal_write_in_memory(uint8_t *data, uint32_t dataLen);
 void hal_continue_write_in_memory(uint8_t *data, uint32_t dataLen);
+void hal_pack_color_16(uint16_t color, uint8_t out[2]);
 
 #ifdef __cplusplus
 }
