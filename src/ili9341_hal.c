@@ -17,7 +17,7 @@
 /********************************************************************************
  * EXTERN VARIABLES
  ********************************************************************************/
-bool halInitialized = false;
+bool halLayerInitialized = false;
 /********************************************************************************
  * PRIVATE MACROS AND DEFINES
  ********************************************************************************/
@@ -66,26 +66,23 @@ static void pack_u16_be(uint16_t v, uint8_t out[2])
 /********************************************************************************
  * GLOBAL FUNCTIONS
  ********************************************************************************/
-void hal_init(void)
+bool hal_init(void)
 {
-	mcal_init();
-	if(mcalInitialized)
+	if(!halLayerInitialized)
 	{
-		halInitialized = true;
+		bool mcalInitialized = mcal_init();
+		if(mcalInitialized)
+		{
+			halLayerInitialized = true;
+		}
 	}
-}
 
-void hal_delay_ms(uint16_t ms)
-{
-	if(halInitialized)
-	{
-		mcal_delay_ms(ms);
-	}
+	return halLayerInitialized;
 }
 
 void hal_hardware_reset(void)
 {
-	if(halInitialized)
+	if(halLayerInitialized)
 	{
 		RST_LOW();
 		mcal_delay_ms(10);
@@ -96,7 +93,7 @@ void hal_hardware_reset(void)
 
 void hal_software_reset(void)
 {
-	if(halInitialized)
+	if(halLayerInitialized)
 	{
 		write_cmd(0x01); // Software reset
 		mcal_delay_ms(150);
@@ -105,7 +102,7 @@ void hal_software_reset(void)
 
 void hal_set_pixel_format_16bits()
 {
-	if(halInitialized)
+	if(halLayerInitialized)
 	{
 		write_cmd(PIXEL_FORMAT_SET);
 		uint8_t pixelFormat[] = {0x55};
@@ -115,7 +112,7 @@ void hal_set_pixel_format_16bits()
 
 void hal_sleep_out()
 {
-	if(halInitialized)
+	if(halLayerInitialized)
 	{
 		write_cmd(SLEEP_OUT); // Sleep out
 		mcal_delay_ms(120);
@@ -124,7 +121,7 @@ void hal_sleep_out()
 
 void hal_display_on()
 {
-	if(halInitialized)
+	if(halLayerInitialized)
 	{
 		write_cmd(DISPLAY_ON);
 	}
@@ -148,7 +145,7 @@ void hal_set_memory_access_control(uint8_t MADCTL)
 
 void hal_set_column_limits(uint16_t startColumn, uint16_t endColumn)
 {
-	if(halInitialized)
+	if(halLayerInitialized)
 	{
 		uint8_t columnData[4];
 		pack_u16_be(startColumn, &columnData[0]);
@@ -161,7 +158,7 @@ void hal_set_column_limits(uint16_t startColumn, uint16_t endColumn)
 
 void hal_set_row_limits(uint16_t startRow, uint16_t endRow)
 {
-	if(halInitialized)
+	if(halLayerInitialized)
 	{
 		uint8_t rowData[4];
 		pack_u16_be(startRow, &rowData[0]);
@@ -179,7 +176,7 @@ void hal_pack_color_16(uint16_t color, uint8_t out[2])
 
 void hal_write_in_memory(uint8_t *data, uint32_t dataLen)
 {
-	if(halInitialized)
+	if(halLayerInitialized)
 	{
 		write_cmd(0x2C);
 		write_data(data, dataLen);
@@ -188,7 +185,7 @@ void hal_write_in_memory(uint8_t *data, uint32_t dataLen)
 
 void hal_continue_write_in_memory(uint8_t *data, uint32_t dataLen)
 {
-	if(halInitialized)
+	if(halLayerInitialized)
 	{
 		write_cmd(0x3C);
 		write_data(data, dataLen);

@@ -23,8 +23,9 @@ extern "C" {
 /********************************************************************************
  * MACROS AND DEFINES
  ********************************************************************************/
-#define ILI9341_NO_ERROR 0U
-#define ILI9341_ERROR 0U
+#define ILI9341_NO_ERROR            0x0U
+#define ILI9341_MODULE_ALREADY_INIT 0x1U
+#define ILI9341_MODULE_NOT_INIT     0x2U
 /********************************************************************************
  * TYPEDEFS
  ********************************************************************************/
@@ -36,11 +37,10 @@ extern "C" {
 /********************************************************************************
  * GLOBAL FUNCTION PROTOTYPES
  ********************************************************************************/
-void    ili9341_init(void);
+uint8_t ili9341_init(void);
 uint8_t ili9341_set_drawing_area(uint16_t x0, uint16_t x1, uint16_t y0, uint16_t y1);
 uint8_t ili9341_draw_image(uint16_t *imageInRawBytes, uint8_t imageLen);
 uint8_t ili9341_fill_screen(uint16_t color);
-void    ili9341_test_screen(void);
 
 #ifdef __cplusplus
 }

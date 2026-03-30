@@ -41,12 +41,11 @@ void pin_clr(uint32_t pin);
 /********************************************************************************
  * EXPORTED VARIABLES
  ********************************************************************************/
-extern bool mcalInitialized;
 
 /********************************************************************************
  * GLOBAL FUNCTION PROTOTYPES
  ********************************************************************************/
-void mcal_init(void);
+bool mcal_init(void);
 void mcal_delay_ms(uint16_t ms);
 void mcal_spi_write(const uint8_t *data, uint32_t len);
 

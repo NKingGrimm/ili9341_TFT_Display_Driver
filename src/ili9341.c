@@ -29,7 +29,7 @@
 /********************************************************************************
  * STATIC VARIABLES
  ********************************************************************************/
-
+static bool driverInitialized = false;
 /********************************************************************************
  * GLOBAL VARIABLES
  ********************************************************************************/
@@ -45,36 +45,56 @@
 /********************************************************************************
  * GLOBAL FUNCTIONS
  ********************************************************************************/
-void ili9341_init(void)
+uint8_t ili9341_init(void)
 {
-	hal_init();
-	hal_hardware_reset();
-	hal_software_reset();
+	uint8_t error = ILI9341_NO_ERROR;
 
-	uint8_t newMADCTL = 0x00;
-	hal_set_BGR_color_order(&newMADCTL);
-	hal_set_memory_access_control(newMADCTL);
+	if(!driverInitialized)
+	{
+		bool halInitialized = hal_init();
+		if(halInitialized)
+		{
+			hal_hardware_reset();
+			hal_software_reset();
 
-	hal_set_pixel_format_16bits();
-	hal_sleep_out();
-	hal_display_on();
+			uint8_t newMADCTL = 0x00;
+			hal_set_BGR_color_order(&newMADCTL);
+			hal_set_memory_access_control(newMADCTL);
+
+			hal_set_pixel_format_16bits();
+			hal_sleep_out();
+			hal_display_on();
+		}
+	}
+	else
+	{
+		error = ILI9341_MODULE_ALREADY_INIT;
+	}
+	return error;
 }
 
 uint8_t ili9341_set_drawing_area(uint16_t x0, uint16_t x1, uint16_t y0, uint16_t y1)
 {
 	uint8_t error = ILI9341_NO_ERROR;
 
-	if((x1 >= DISPLAY_WIDTH) ||
-    (y1 >= DISPLAY_HEIGHT) ||
-    (x0 > x1)||
-    (y0 > y1))
+	if(driverInitialized)
 	{
-		error = ILI9341_ERROR;
+		if((x1 >= DISPLAY_WIDTH) ||
+			(y1 >= DISPLAY_HEIGHT) ||
+			(x0 > x1)||
+			(y0 > y1))
+		{
+			// TODO: add error for incorrect values
+		}
+		else
+		{
+			hal_set_column_limits(x0, x1);
+			hal_set_row_limits(y0, y1);
+		}
 	}
 	else
 	{
-		hal_set_column_limits(x0, x1);
-		hal_set_row_limits(y0, y1);
+		error = ILI9341_MODULE_NOT_INIT;
 	}
 
 	return error;
@@ -83,15 +103,23 @@ uint8_t ili9341_set_drawing_area(uint16_t x0, uint16_t x1, uint16_t y0, uint16_t
 uint8_t ili9341_fill_screen(uint16_t color)
 {
 	uint8_t error = ILI9341_NO_ERROR;
-	uint8_t screenAreaColored[2];
 
-	error = ili9341_set_drawing_area(0, 239, 0, 319);
-
-	hal_pack_color_16(color, screenAreaColored);
-	hal_write_in_memory(screenAreaColored, 2);
-	for(int i = 0; i < ((240U*320U) - 1); i++)
+	if(driverInitialized)
 	{
-		hal_continue_write_in_memory(screenAreaColored, 2);
+		uint8_t screenAreaColored[2];
+
+		error = ili9341_set_drawing_area(0, 239, 0, 319);
+
+		hal_pack_color_16(color, screenAreaColored);
+		hal_write_in_memory(screenAreaColored, 2);
+		for(int i = 0; i < ((240U*320U) - 1); i++)
+		{
+			hal_continue_write_in_memory(screenAreaColored, 2);
+		}
+	}
+	else
+	{
+		error = ILI9341_MODULE_NOT_INIT;
 	}
 
 	return error;
@@ -100,5 +128,13 @@ uint8_t ili9341_fill_screen(uint16_t color)
 uint8_t ili9341_draw_image(uint16_t *imageInRawBytes, uint8_t imageLen)
 {
 	uint8_t error = ILI9341_NO_ERROR;
+	if(driverInitialized)
+	{
+		// TODO: Add core logic
+	}
+	else
+	{
+		error = ILI9341_MODULE_NOT_INIT;
+	}
 	return error;
 }

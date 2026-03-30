@@ -35,8 +35,7 @@ extern "C" {
 /********************************************************************************
  * GLOBAL FUNCTION PROTOTYPES
  ********************************************************************************/
-void hal_init(void);
-void hal_delay_ms(uint16_t ms);
+bool hal_init(void);
 
 void hal_hardware_reset(void);
 void hal_software_reset(void);

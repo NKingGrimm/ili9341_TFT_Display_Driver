@@ -17,7 +17,6 @@
 /********************************************************************************
  * EXTERN VARIABLES
  ********************************************************************************/
-bool mcalInitialized = false;
 
 /********************************************************************************
  * PRIVATE MACROS AND DEFINES
@@ -50,6 +49,7 @@ inline void pin_clr(uint32_t pin)
 /********************************************************************************
  * STATIC VARIABLES
  ********************************************************************************/
+static bool mcalLayerInitialized = false;
 
 /********************************************************************************
  * GLOBAL VARIABLES
@@ -95,21 +95,22 @@ static void spi_init()
 /********************************************************************************
  * GLOBAL FUNCTIONS
  ********************************************************************************/
-void mcal_init(void)
+bool mcal_init(void)
 {
-	if(mcalInitialized == false)
+	if(mcalLayerInitialized == false)
 	{
 		delay_timer_init();
 		spi_init();
 
-		mcalInitialized = true;
+		mcalLayerInitialized = true;
 	}
 	else{}
+	return mcalLayerInitialized;
 }
 
 void mcal_delay_ms(uint16_t ms)
 {
-	if(mcalInitialized == true)
+	if(mcalLayerInitialized == true)
 	{
 		if (ms != 0)
 		{
@@ -128,7 +129,7 @@ void mcal_delay_ms(uint16_t ms)
 
 void mcal_spi_write(const uint8_t *data, uint32_t len)
 {
-	if(mcalInitialized == true)
+	if(mcalLayerInitialized == true)
 	{
 		NRF_SPIM0->TXD.PTR = (uint32_t)data;
 		NRF_SPIM0->TXD.MAXCNT = len;
