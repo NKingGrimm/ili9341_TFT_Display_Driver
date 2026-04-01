@@ -12,6 +12,7 @@
  ********************************************************************************/
 #include "ili9341.h"
 #include "ili9341_hal.h"
+#include <string.h>
 
 /********************************************************************************
  * EXTERN VARIABLES
@@ -127,12 +128,37 @@ uint8_t ili9341_fill_screen(uint16_t color)
 	return error;
 }
 
-uint8_t ili9341_draw_image(uint16_t *imageInRawBytes, uint8_t imageLen)
+uint8_t ili9341_draw_image(const uint8_t *imageInRawBytes, uint32_t imageLen)
 {
 	uint8_t error = ILI9341_NO_ERROR;
+
 	if(driverInitialized)
 	{
-		// TODO: Add core logic
+		enum { IMAGE_CHUNK_BYTES = 256 };
+		uint8_t imageChunk[IMAGE_CHUNK_BYTES];
+
+		error = ili9341_set_drawing_area(0, 119, 0, 159);
+
+		if(imageLen > 0U)
+		{
+			uint32_t offset = 0U;
+			while(offset < imageLen)
+			{
+				uint32_t remaining = imageLen - offset;
+				uint32_t chunkLen = (remaining > IMAGE_CHUNK_BYTES) ? IMAGE_CHUNK_BYTES : remaining;
+
+				memcpy(imageChunk, &imageInRawBytes[offset], chunkLen);
+				if(offset == 0U)
+				{
+					hal_write_in_memory(imageChunk, chunkLen);
+				}
+				else
+				{
+					hal_continue_write_in_memory(imageChunk, chunkLen);
+				}
+				offset += chunkLen;
+			}
+		}
 	}
 	else
 	{

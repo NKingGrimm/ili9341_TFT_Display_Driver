@@ -39,7 +39,7 @@ extern "C" {
  ********************************************************************************/
 uint8_t ili9341_init(void);
 uint8_t ili9341_set_drawing_area(uint16_t x0, uint16_t x1, uint16_t y0, uint16_t y1);
-uint8_t ili9341_draw_image(uint16_t *imageInRawBytes, uint8_t imageLen);
+uint8_t ili9341_draw_image(const uint8_t *imageInRawBytes, uint32_t imageLen);
 uint8_t ili9341_fill_screen(uint16_t color);
 
 #ifdef __cplusplus
