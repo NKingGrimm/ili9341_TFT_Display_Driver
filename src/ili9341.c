@@ -114,7 +114,7 @@ uint8_t ili9341_fill_screen(uint16_t color)
 
 		hal_pack_color_16(color, screenAreaColored);
 		hal_write_in_memory(screenAreaColored, 2);
-		for(int i = 0; i < ((240U*320U) - 1); i++)
+		for(int i = 0; i < ((240U*320U) - 2); i++)
 		{
 			hal_continue_write_in_memory(screenAreaColored, 2);
 		}
