@@ -204,14 +204,6 @@ extern "C" {
 #define PIXEL_FORMAT_16_BIT                 0x55  /* RGB565 — 2 bytes per pixel, most common for SPI */
 #define PIXEL_FORMAT_18_BIT                 0x66  /* RGB666 — 3 bytes per pixel                      */
 
-
-/* --------------------------------------------------------------------------
- * Display dimensions
- * -------------------------------------------------------------------------- */
-
-#define DISPLAY_WIDTH                       239
-#define DISPLAY_HEIGHT                      319
-
 #ifdef __cplusplus
 }
 #endif

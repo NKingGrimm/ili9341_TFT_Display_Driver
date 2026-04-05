@@ -57,9 +57,9 @@ uint8_t ili9341_init(void)
 			hal_hardware_reset();
 			hal_software_reset();
 
-			uint8_t newMADCTL = 0x40; //TODO: Add function to modify MX bit instead of hardcoding to 0x40
-			hal_set_BGR_color_order(&newMADCTL);
-			hal_set_memory_access_control(newMADCTL);
+			uint8_t configMADCTL = 0x40; //TODO: Add function to modify MX bit instead of hardcoding to 0x40
+			hal_set_BGR_color_order(&configMADCTL);
+			hal_set_MADCTL(configMADCTL);
 
 			hal_set_pixel_format_16bits();
 			hal_sleep_out();
