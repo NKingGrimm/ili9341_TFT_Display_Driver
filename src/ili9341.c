@@ -21,7 +21,7 @@
 /********************************************************************************
  * PRIVATE MACROS AND DEFINES
  ********************************************************************************/
-
+#define INIT_SCREEN_BLUE 0x001F
 /********************************************************************************
  * PRIVATE TYPEDEFS
  ********************************************************************************/
@@ -54,17 +54,10 @@ uint8_t ili9341_init(void)
 		bool halInitialized = hal_init();
 		if(halInitialized)
 		{
-			hal_hardware_reset();
-			hal_software_reset();
-
-			uint8_t configMADCTL = 0x40; //TODO: Add function to modify MX bit instead of hardcoding to 0x40
-			hal_set_BGR_color_order(&configMADCTL);
-			hal_set_MADCTL(configMADCTL);
-
-			hal_set_pixel_format_16bits();
-			hal_sleep_out();
-			hal_display_on();
-
+		/*TODO: Implement screen initialization. The screen must completely turn blue
+			and show a message vertically and another horizontally to show there is no
+			mirrored image. */
+			(void) ili9341_fill_screen(INIT_SCREEN_BLUE);
 			driverInitialized = true;
 		}
 	}

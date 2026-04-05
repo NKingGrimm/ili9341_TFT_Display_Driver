@@ -73,6 +73,17 @@ bool hal_init(void)
 		bool mcalInitialized = mcal_init();
 		if(mcalInitialized)
 		{
+			hal_hardware_reset();
+			hal_software_reset();
+
+			uint8_t configMADCTL = 0x40; //TODO: Add function to modify MX bit instead of hardcoding to 0x40
+			hal_set_BGR_color_order(&configMADCTL);
+			hal_set_MADCTL(configMADCTL);
+
+			hal_set_pixel_format_16bits();
+			hal_sleep_out();
+			hal_display_on();
+
 			halLayerInitialized = true;
 		}
 	}
