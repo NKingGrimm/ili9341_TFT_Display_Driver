@@ -21,7 +21,7 @@ extern "C" {
 #define DISPLAY_HEIGHT 320 //pixels
 
 /* TODO: ILI9341 has different interfaces to work on (MCU, RGB or VSYNC). Here
-the user will have the possibility to select between those possible ingterfaces
+the user will have the possibility to select between those possible interfaces
 and some other configurations */
 /********************************************************************************
  * INCLUDES
