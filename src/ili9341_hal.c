@@ -45,11 +45,14 @@ static uint8_t halCurrentMADCTL = 0x00;
 /********************************************************************************
  * STATIC FUNCTION PROTOTYPES
  ********************************************************************************/
-
+static void write_cmd(uint8_t cmd);
+static void write_data(const uint8_t *data, uint32_t len);
+static void pack_u16_be(uint16_t v, uint8_t out[2]);
+static void _initialize_MADCTL();
 /********************************************************************************
  * STATIC FUNCTIONS
  ********************************************************************************/
-static void write_cmd(uint8_t cmd)
+void write_cmd(uint8_t cmd)
 {
 	DC_CMD();
 	CHIP_SELECT();
@@ -57,7 +60,7 @@ static void write_cmd(uint8_t cmd)
 	CHIP_UNSELECT();
 }
 
-static void write_data(const uint8_t *data, uint32_t len)
+void write_data(const uint8_t *data, uint32_t len)
 {
 	DC_DATA();
 	CHIP_SELECT();
@@ -65,12 +68,38 @@ static void write_data(const uint8_t *data, uint32_t len)
 	CHIP_UNSELECT();
 }
 
-static void pack_u16_be(uint16_t v, uint8_t out[2])
+void pack_u16_be(uint16_t v, uint8_t out[2])
 {
 	out[0] = (uint8_t)(v >> 8);
 	out[1] = (uint8_t)(v & 0xFFu);
 }
 
+void _initialize_MADCTL()
+{
+#if HAL_MADCTL_ROW_WRITE_ORDER_INVERSION == TRUE
+			hal_MADCTL_invert_row_write_order();
+#endif /* #if HAL_MADCTL_ROW_WRITE_ORDER_INVERSION == TRUE */
+
+#if HAL_MADCTL_COLUMN_WRITE_ORDER_INVERSION == TRUE
+			hal_MADCTL_invert_column_write_order();
+#endif /* #if HAL_MADCTL_COLUMN_WRITE_ORDER_INVERSION == TRUE */
+
+#if HAL_MADCTL_HORIZONTALLY_FLIP == TRUE
+			hal_MADCTL_flip_horizontally();
+#endif /* #if HAL_MADCTL_HORIZONTALLY_FLIP == TRUE */
+
+#if HAL_MADCTL_VERTICAL_REFRESH_ORDER_INVERSION == TRUE
+			hal_MADCTL_invert_vertical_refresh_order();
+#endif /* #if HAL_MADCTL_VERTICAL_REFRESH_ORDER_INVERSION == TRUE */
+
+#if HAL_MADCTL_HORIZONTAL_REFRESH_ORDER_INVERSION == TRUE
+			hal_MADCTL_invert_horizontal_refresh_order();
+#endif /* #if HAL_MADCTL_HORIZONTAL_REFRESH_ORDER_INVERSION == TRUE */
+
+#if HAL_MADCTL_RGB_BGR_INVERSION == TRUE
+			hal_MADCTL_invert_RGB_BGR_color_order();
+#endif /* #if HAL_MADCTL_RGB_BGR_INVERSION == TRUE */
+}
 /********************************************************************************
  * GLOBAL FUNCTIONS
  ********************************************************************************/
@@ -84,7 +113,7 @@ bool hal_init(void)
 			hal_hardware_reset();
 			hal_software_reset();
 
-			hal_MADCTL_invert_RGB_BGR_color_order();
+			_initialize_MADCTL();
 			hal_set_MADCTL();
 
 			hal_set_pixel_format_16bits();

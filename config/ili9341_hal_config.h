@@ -21,7 +21,12 @@ extern "C" {
 #define HAL_DISPLAY_HEIGHT 320 //pixels
 
 /* ================================= MADCLT =================================== */
-#define HAL_RGB_TO_BGR FALSE
+#define HAL_MADCTL_ROW_WRITE_ORDER_INVERSION          FALSE
+#define HAL_MADCTL_COLUMN_WRITE_ORDER_INVERSION       FALSE
+#define HAL_MADCTL_HORIZONTALLY_FLIP                  FALSE
+#define HAL_MADCTL_VERTICAL_REFRESH_ORDER_INVERSION   FALSE
+#define HAL_MADCTL_HORIZONTAL_REFRESH_ORDER_INVERSION FALSE
+#define HAL_MADCTL_RGB_BGR_INVERSION                  FALSE
 
 
 /* TODO: ILI9341 has different interfaces to work on (MCU, RGB or VSYNC). Here
