@@ -18,9 +18,16 @@
  * EXTERN VARIABLES
  ********************************************************************************/
 bool halLayerInitialized = false;
+
 /********************************************************************************
  * PRIVATE MACROS AND DEFINES
  ********************************************************************************/
+#define HAL_MADCTL_ROW_ADDR_ORDER_BIT           (1U << 7)
+#define HAL_MADCTL_COLUMN_ADDR_ORDER_BIT        (1U << 6)
+#define HAL_MADCTL_ROW_COLUMN_EXCHANGE_BIT      (1U << 5)
+#define HAL_MADCTL_VERTICAL_REFRESH_ORDER_BIT   (1U << 4)
+#define HAL_MADCTL_RBG_BGR_BIT                  (1U << 3)
+#define HAL_MADCTL_HORIZONTAL_REFRESH_ORDER_BIT (1U << 2)
 
 /********************************************************************************
  * PRIVATE TYPEDEFS
@@ -29,6 +36,7 @@ bool halLayerInitialized = false;
 /********************************************************************************
  * STATIC VARIABLES
  ********************************************************************************/
+static uint8_t halCurrentMADCTL = 0x00;
 
 /********************************************************************************
  * GLOBAL VARIABLES
@@ -76,9 +84,8 @@ bool hal_init(void)
 			hal_hardware_reset();
 			hal_software_reset();
 
-			uint8_t configMADCTL = 0x40; //TODO: Add function to modify MX bit instead of hardcoding to 0x40
-			hal_set_BGR_color_order(&configMADCTL);
-			hal_set_MADCTL(configMADCTL);
+			hal_MADCTL_invert_RGB_BGR_color_order();
+			hal_set_MADCTL();
 
 			hal_set_pixel_format_16bits();
 			hal_sleep_out();
@@ -138,32 +145,43 @@ void hal_display_on()
 	}
 }
 
-void hal_invert_row_write_order(uint8_t *currentMADCTL)
-{}
-void hal_invert_column_write_order(uint8_t *currentMADCTL)
-{}
-void hal_flip_horizontally(uint8_t *currentMADCTL)
-{}
-void hal_invert_vertical_refresh_order(uint8_t *currentMADCTL)
-{}
-void hal_invert_horizontal_refresh_order(uint8_t *currentMADCTL)
-{}
-
-void hal_set_RGB_color_order(uint8_t *currentMADCTL)
+/* =================================== MADCTL =================================== */
+void hal_MADCTL_invert_row_write_order()
 {
-	*currentMADCTL &= 0xF7; // Clear out BGR bit, leaving it as RGB
+	halCurrentMADCTL ^= HAL_MADCTL_ROW_ADDR_ORDER_BIT;
 }
 
-void hal_set_BGR_color_order(uint8_t *currentMADCTL)
+void hal_MADCTL_invert_column_write_order()
 {
-	*currentMADCTL |= 0x08; // Set BGR bit
+	halCurrentMADCTL ^= HAL_MADCTL_COLUMN_ADDR_ORDER_BIT;
 }
 
-void hal_set_MADCTL(uint8_t MADCTL)
+void hal_MADCTL_flip_horizontally()
+{
+	halCurrentMADCTL ^= HAL_MADCTL_ROW_COLUMN_EXCHANGE_BIT;
+}
+
+void hal_MADCTL_invert_vertical_refresh_order()
+{
+	halCurrentMADCTL ^= HAL_MADCTL_VERTICAL_REFRESH_ORDER_BIT;
+}
+
+void hal_MADCTL_invert_horizontal_refresh_order()
+{
+	halCurrentMADCTL ^= HAL_MADCTL_HORIZONTAL_REFRESH_ORDER_BIT;
+}
+
+void hal_MADCTL_invert_RGB_BGR_color_order()
+{
+	halCurrentMADCTL ^= HAL_MADCTL_RBG_BGR_BIT;
+}
+
+void hal_set_MADCTL()
 {
   write_cmd(MEMORY_ACCESS_CONTROL);
-	write_data(&MADCTL, 1);
+	write_data(&halCurrentMADCTL, 1);
 }
+/* =================================== MADCTL =================================== */
 
 void hal_set_column_limits(uint16_t startColumn, uint16_t endColumn)
 {

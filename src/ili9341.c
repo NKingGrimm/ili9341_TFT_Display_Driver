@@ -74,8 +74,8 @@ uint8_t ili9341_set_drawing_area(uint16_t x0, uint16_t x1, uint16_t y0, uint16_t
 
 	if(driverInitialized)
 	{
-		if((x1 >= DISPLAY_WIDTH) ||
-			(y1 >= DISPLAY_HEIGHT) ||
+		if((x1 >= HAL_DISPLAY_WIDTH) ||
+			(y1 >= HAL_DISPLAY_HEIGHT) ||
 			(x0 > x1)||
 			(y0 > y1))
 		{
