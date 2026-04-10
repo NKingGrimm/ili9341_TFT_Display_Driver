@@ -3,7 +3,7 @@
  * @file    ili9341_hal_config.h
  * @author  Leonardo Oseguera T.
  * @date    ${date}
- * @brief
+ * @brief   HAL configuration options for display geometry and MADCTL behavior.
  ********************************************************************************
  */
 
@@ -29,9 +29,8 @@ extern "C" {
 #define HAL_MADCTL_RGB_BGR_INVERSION                  true
 
 
-/* TODO: ILI9341 has different interfaces to work on (MCU, RGB or VSYNC). Here
-the user will have the possibility to select between those possible interfaces
-and some other configurations */
+/* TODO: The ILI9341 supports multiple interfaces (MCU, RGB, VSYNC). Extend this
+ * file to select the desired interface and related settings. */
 /********************************************************************************
  * INCLUDES
  ********************************************************************************/

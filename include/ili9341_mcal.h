@@ -3,7 +3,7 @@
  * @file    ili9341_mcal.h
  * @author  Leonardo Oseguera T.
  * @date    ${date}
- * @brief
+ * @brief   MCU abstraction layer interface for GPIO, SPI, and delays.
  ********************************************************************************
  */
 
@@ -24,6 +24,7 @@ extern "C" {
 /********************************************************************************
  * MACROS AND DEFINES
  ********************************************************************************/
+/* MCU-specific GPIO helpers to be provided by the application. */
 void set_pin(uint32_t pin);
 void pin_clr(uint32_t pin);
 
@@ -45,8 +46,26 @@ void pin_clr(uint32_t pin);
 /********************************************************************************
  * GLOBAL FUNCTION PROTOTYPES
  ********************************************************************************/
+/**
+ * @brief Initialize MCU peripherals used by the ILI9341 driver.
+ * @return true when the MCU-specific layer is ready.
+ *
+ * The application must implement this function for the selected target.
+ */
 bool mcal_init(void);
+
+/**
+ * @brief Busy-wait delay in milliseconds.
+ *
+ * The application must implement this function for the selected target.
+ */
 void mcal_delay_ms(uint16_t ms);
+
+/**
+ * @brief Write a byte buffer over the MCU's SPI peripheral.
+ *
+ * The application must implement this function for the selected target.
+ */
 void mcal_spi_write(const uint8_t *data, uint32_t len);
 
 #ifdef __cplusplus

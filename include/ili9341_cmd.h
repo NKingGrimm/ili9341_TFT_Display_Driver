@@ -3,7 +3,7 @@
  * @file    ili9341_cmd.h
  * @author  Leonardo Oseguera T.
  * @date    ${date}
- * @brief
+ * @brief   ILI9341 command and register definitions.
  ********************************************************************************
  */
 #ifndef ILI9341_CMD_H
@@ -17,9 +17,9 @@ extern "C" {
  * Source: ILI9341 Datasheet V1.11, Section 8 (Command List)
  * ==========================================================================
  *
- * Usage with nRF52840 bare-metal SPI driver:
- *   - Pull D/CX LOW  before sending a command byte
- *   - Pull D/CX HIGH before sending parameter/data bytes
+ * Usage with a bare-metal SPI driver:
+ *   - Pull D/CX LOW  before sending a command byte.
+ *   - Pull D/CX HIGH before sending parameter/data bytes.
  *   - EXTC pin must be tied HIGH (VDDI) for Level 2 / Extended commands
  *     to be accepted; otherwise they are treated as NOP.
  * ========================================================================== */

@@ -3,7 +3,7 @@
  * @file    ili9341_mcal_config.h
  * @author  Leonardo Oseguera T.
  * @date    ${date}
- * @brief
+ * @brief   MCAL configuration indirection for target-specific settings.
  ********************************************************************************
  */
 

@@ -3,7 +3,7 @@
  * @file    ili9341.c
  * @author  Leonardo Oseguera T.
  * @date    ${date}
- * @brief
+ * @brief   High-level ILI9341 driver API implementation.
  ********************************************************************************
  */
 

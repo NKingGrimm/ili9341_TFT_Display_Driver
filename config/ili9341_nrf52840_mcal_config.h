@@ -3,7 +3,7 @@
  * @file    ili9341_nrf52840_mcal_config.h
  * @author  Leonardo Oseguera T.
  * @date    ${date}
- * @brief
+ * @brief   MCAL pin mapping for the nrf52840 target example.
  ********************************************************************************
  */
 

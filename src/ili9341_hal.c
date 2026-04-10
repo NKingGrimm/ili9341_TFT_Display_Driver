@@ -3,7 +3,7 @@
  * @file    ili9341_hal.c
  * @author  Leonardo Oseguera T.
  * @date    ${date}
- * @brief
+ * @brief   HAL implementation for ILI9341 command sequencing.
  ********************************************************************************
  */
 

@@ -3,7 +3,7 @@
  * @file    ili9341_nrf52840_mcal.c
  * @author  Leonardo Oseguera T.
  * @date    ${date}
- * @brief
+ * @brief   nrf52840 MCAL implementation example for SPI, GPIO, and delay.
  ********************************************************************************
  */
 

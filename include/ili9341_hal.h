@@ -3,7 +3,7 @@
  * @file    ili9341_hal.h
  * @author  Leonardo Oseguera T.
  * @date    ${date}
- * @brief
+ * @brief   Hardware abstraction layer for ILI9341 command sequencing.
  ********************************************************************************
  */
 
@@ -36,13 +36,23 @@ extern "C" {
 /********************************************************************************
  * GLOBAL FUNCTION PROTOTYPES
  ********************************************************************************/
+/**
+ * @brief Initialize the HAL and underlying MCU layer.
+ */
 bool hal_init(void);
 
+/** @brief Toggle the display reset pin using the MCU layer. */
 void hal_hardware_reset(void);
+/** @brief Issue a software reset command. */
 void hal_software_reset(void);
 
+/* TODO: 16-bit is mentioned here. Once the configuration to have an 18-bit
+  RGB image is implemented, generalize this brief element */
+/** @brief Configure 16-bit pixel format. */
 void hal_set_pixel_format_16bits(void);
+/** @brief Exit sleep mode. */
 void hal_sleep_out(void);
+/** @brief Enable display output. */
 void hal_display_on(void);
 
 /******************** MADCTL ****************************/
