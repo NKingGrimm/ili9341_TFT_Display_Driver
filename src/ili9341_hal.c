@@ -45,14 +45,14 @@ static uint8_t halCurrentMADCTL = 0x00;
 /********************************************************************************
  * STATIC FUNCTION PROTOTYPES
  ********************************************************************************/
-static void write_cmd(uint8_t cmd);
-static void write_data(const uint8_t *data, uint32_t len);
-static void pack_u16_be(uint16_t v, uint8_t out[2]);
+static void _write_cmd(uint8_t cmd);
+static void _write_data(const uint8_t *data, uint32_t len);
+static void _pack_u16_be(uint16_t v, uint8_t out[2]);
 static void _initialize_MADCTL();
 /********************************************************************************
  * STATIC FUNCTIONS
  ********************************************************************************/
-void write_cmd(uint8_t cmd)
+void _write_cmd(uint8_t cmd)
 {
 	DC_CMD();
 	CHIP_SELECT();
@@ -60,7 +60,7 @@ void write_cmd(uint8_t cmd)
 	CHIP_UNSELECT();
 }
 
-void write_data(const uint8_t *data, uint32_t len)
+void _write_data(const uint8_t *data, uint32_t len)
 {
 	DC_DATA();
 	CHIP_SELECT();
@@ -68,7 +68,7 @@ void write_data(const uint8_t *data, uint32_t len)
 	CHIP_UNSELECT();
 }
 
-void pack_u16_be(uint16_t v, uint8_t out[2])
+void _pack_u16_be(uint16_t v, uint8_t out[2])
 {
 	out[0] = (uint8_t)(v >> 8);
 	out[1] = (uint8_t)(v & 0xFFu);
@@ -144,7 +144,7 @@ void hal_software_reset(void)
 {
 	if(halLayerInitialized)
 	{
-		write_cmd(0x01); // Software reset
+		_write_cmd(0x01); // Software reset
 		mcal_delay_ms(150);
 	}
 }
@@ -153,9 +153,9 @@ void hal_set_pixel_format_16bits()
 {
 	if(halLayerInitialized)
 	{
-		write_cmd(PIXEL_FORMAT_SET);
+		_write_cmd(PIXEL_FORMAT_SET);
 		uint8_t pixelFormat[] = {0x55};
-		write_data(pixelFormat, 1);
+		_write_data(pixelFormat, 1);
 	}
 }
 
@@ -163,7 +163,7 @@ void hal_sleep_out()
 {
 	if(halLayerInitialized)
 	{
-		write_cmd(SLEEP_OUT); // Sleep out
+		_write_cmd(SLEEP_OUT); // Sleep out
 		mcal_delay_ms(120);
 	}
 }
@@ -172,7 +172,7 @@ void hal_display_on()
 {
 	if(halLayerInitialized)
 	{
-		write_cmd(DISPLAY_ON);
+		_write_cmd(DISPLAY_ON);
 	}
 }
 
@@ -209,8 +209,8 @@ void hal_MADCTL_invert_RGB_BGR_color_order()
 
 void hal_set_MADCTL()
 {
-  write_cmd(MEMORY_ACCESS_CONTROL);
-	write_data(&halCurrentMADCTL, 1);
+  _write_cmd(MEMORY_ACCESS_CONTROL);
+	_write_data(&halCurrentMADCTL, 1);
 }
 /* ============================================================================== */
 
@@ -219,11 +219,11 @@ void hal_set_column_limits(uint16_t startColumn, uint16_t endColumn)
 	if(halLayerInitialized)
 	{
 		uint8_t columnData[4];
-		pack_u16_be(startColumn, &columnData[0]);
-		pack_u16_be(endColumn, &columnData[2]);
+		_pack_u16_be(startColumn, &columnData[0]);
+		_pack_u16_be(endColumn, &columnData[2]);
 
-		write_cmd(COLUMN_ADDRESS_SET);
-		write_data(columnData, 4);
+		_write_cmd(COLUMN_ADDRESS_SET);
+		_write_data(columnData, 4);
 	}
 }
 
@@ -232,25 +232,25 @@ void hal_set_row_limits(uint16_t startRow, uint16_t endRow)
 	if(halLayerInitialized)
 	{
 		uint8_t rowData[4];
-		pack_u16_be(startRow, &rowData[0]);
-		pack_u16_be(endRow, &rowData[2]);
+		_pack_u16_be(startRow, &rowData[0]);
+		_pack_u16_be(endRow, &rowData[2]);
 
-		write_cmd(PAGE_ADDRESS_SET);
-		write_data(rowData, 4);
+		_write_cmd(PAGE_ADDRESS_SET);
+		_write_data(rowData, 4);
 	}
 }
 
 void hal_pack_color_16(uint16_t color, uint8_t out[2])
 {
-	pack_u16_be(color, &out[0]);
+	_pack_u16_be(color, &out[0]);
 }
 
 void hal_write_in_memory(uint8_t *data, uint32_t dataLen)
 {
 	if(halLayerInitialized)
 	{
-		write_cmd(0x2C);
-		write_data(data, dataLen);
+		_write_cmd(0x2C);
+		_write_data(data, dataLen);
 	}
 }
 
@@ -258,7 +258,7 @@ void hal_continue_write_in_memory(uint8_t *data, uint32_t dataLen)
 {
 	if(halLayerInitialized)
 	{
-		write_cmd(0x3C);
-		write_data(data, dataLen);
+		_write_cmd(0x3C);
+		_write_data(data, dataLen);
 	}
 }
