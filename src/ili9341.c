@@ -54,11 +54,11 @@ uint8_t ili9341_init(void)
 		bool halInitialized = hal_init();
 		if(halInitialized)
 		{
+			driverInitialized = true;
 		/*TODO: Implement screen initialization. The screen must completely turn blue
 			and show a message vertically and another horizontally to show there is no
 			mirrored image. */
 			(void) ili9341_fill_screen(INIT_SCREEN_BLUE);
-			driverInitialized = true;
 		}
 	}
 	else

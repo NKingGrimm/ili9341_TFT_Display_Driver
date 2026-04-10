@@ -76,27 +76,27 @@ void pack_u16_be(uint16_t v, uint8_t out[2])
 
 void _initialize_MADCTL()
 {
-#if HAL_MADCTL_ROW_WRITE_ORDER_INVERSION == TRUE
+#if HAL_MADCTL_VERTICAL_FLIP
 			hal_MADCTL_invert_row_write_order();
-#endif /* #if HAL_MADCTL_ROW_WRITE_ORDER_INVERSION == TRUE */
+#endif /* #if HAL_MADCTL_VERTICAL_FLIP == TRUE */
 
-#if HAL_MADCTL_COLUMN_WRITE_ORDER_INVERSION == TRUE
+#if HAL_MADCTL_HORIZONTAL_FLIP
 			hal_MADCTL_invert_column_write_order();
-#endif /* #if HAL_MADCTL_COLUMN_WRITE_ORDER_INVERSION == TRUE */
+#endif /* #if HAL_MADCTL_HORIZONTAL_FLIP == TRUE */
 
-#if HAL_MADCTL_HORIZONTALLY_FLIP == TRUE
+#if HAL_MADCTL_LANDSCAPE_MODE
 			hal_MADCTL_flip_horizontally();
-#endif /* #if HAL_MADCTL_HORIZONTALLY_FLIP == TRUE */
+#endif /* #if HAL_MADCTL_LANDSCAPE_MODE == TRUE */
 
-#if HAL_MADCTL_VERTICAL_REFRESH_ORDER_INVERSION == TRUE
+#if HAL_MADCTL_VERTICAL_REFRESH_ORDER_INVERSION
 			hal_MADCTL_invert_vertical_refresh_order();
 #endif /* #if HAL_MADCTL_VERTICAL_REFRESH_ORDER_INVERSION == TRUE */
 
-#if HAL_MADCTL_HORIZONTAL_REFRESH_ORDER_INVERSION == TRUE
+#if HAL_MADCTL_HORIZONTAL_REFRESH_ORDER_INVERSION
 			hal_MADCTL_invert_horizontal_refresh_order();
 #endif /* #if HAL_MADCTL_HORIZONTAL_REFRESH_ORDER_INVERSION == TRUE */
 
-#if HAL_MADCTL_RGB_BGR_INVERSION == TRUE
+#if HAL_MADCTL_RGB_BGR_INVERSION
 			hal_MADCTL_invert_RGB_BGR_color_order();
 #endif /* #if HAL_MADCTL_RGB_BGR_INVERSION == TRUE */
 }
@@ -110,6 +110,10 @@ bool hal_init(void)
 		bool mcalInitialized = mcal_init();
 		if(mcalInitialized)
 		{
+			/* TODO: Create an internal function to init HAL and move this variable at the
+			end of this function */
+			halLayerInitialized = true;
+
 			hal_hardware_reset();
 			hal_software_reset();
 
@@ -119,8 +123,6 @@ bool hal_init(void)
 			hal_set_pixel_format_16bits();
 			hal_sleep_out();
 			hal_display_on();
-
-			halLayerInitialized = true;
 		}
 	}
 
@@ -210,7 +212,7 @@ void hal_set_MADCTL()
   write_cmd(MEMORY_ACCESS_CONTROL);
 	write_data(&halCurrentMADCTL, 1);
 }
-/* =================================== MADCTL =================================== */
+/* ============================================================================== */
 
 void hal_set_column_limits(uint16_t startColumn, uint16_t endColumn)
 {
