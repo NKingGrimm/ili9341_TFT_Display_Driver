@@ -66,6 +66,9 @@ uint8_t ili9341_draw_image(const uint8_t *imageInRawBytes,
  */
 uint8_t ili9341_fill_screen(uint16_t color);
 
+uint8_t ili9341_change_to_landscape();
+uint8_t ili9341_change_to_portrait();
+
 #ifdef __cplusplus
 }
 #endif
